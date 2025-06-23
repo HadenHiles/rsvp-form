@@ -1,0 +1,2118 @@
+<html lang="en" style="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Rehearsal Dinner Invitation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&amp;family=Great+Vibes&amp;family=Montserrat:wght@300;400;500&amp;display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f9f7f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .script {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .envelope {
+            transition: transform 1.5s ease-in-out;
+            transform-style: preserve-3d;
+        }
+
+        .envelope.open {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-front,
+        .envelope-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .envelope-back {
+            transform: rotateX(180deg);
+        }
+
+        .card {
+            transition: all 0.8s ease-in-out;
+            transform: translateY(0);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .card.show {
+            transform: translateY(-20px);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .floral-corner {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            opacity: 0.85;
+        }
+
+        .top-left {
+            top: 0;
+            left: 0;
+        }
+
+        .top-right {
+            top: 0;
+            right: 0;
+            transform: scaleX(-1);
+        }
+
+        .bottom-left {
+            bottom: 0;
+            left: 0;
+            transform: scaleY(-1);
+        }
+
+        .bottom-right {
+            bottom: 0;
+            right: 0;
+            transform: scale(-1);
+        }
+
+        .btn-rsvp {
+            transition: all 0.3s ease;
+        }
+
+        .btn-rsvp:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        .thank-you {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .thank-you.show {
+            opacity: 1;
+        }
+
+        /* Petal Animation */
+        .petal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden;
+            display: none;
+        }
+
+        .petal {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            opacity: 0;
+            z-index: 1000;
+        }
+
+        @keyframes falling {
+            0% {
+                transform: translate(0, -10%) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.9;
+            }
+
+            90% {
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translate(100px, 100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Shimmer Effect */
+        .shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.4) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            z-index: 2;
+            animation: shimmer 2s ease-in-out infinite;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 2000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .admin-panel.open {
+            right: 0;
+        }
+
+        .admin-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2001;
+            background-color: #4A5D45;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .response-item {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 0;
+        }
+
+        .response-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Form Styles */
+        .form-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #8A9A80;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4A5D45;
+            box-shadow: 0 0 0 2px rgba(74, 93, 69, 0.2);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #4A5D45;
+        }
+
+        /* Completely redesigned envelope front - no wax seal */
+        .envelope-front {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .envelope-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .click-instruction {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            margin: 0 auto;
+            max-width: 200px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .click-instruction {
+                bottom: 30px;
+                max-width: 180px;
+            }
+        }
+    </style>
+    <style>
+        *,
+        ::before,
+        ::after {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+
+        ::backdrop {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+
+        /* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */
+        *,
+        ::after,
+        ::before {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb
+        }
+
+        ::after,
+        ::before {
+            --tw-content: ''
+        }
+
+        :host,
+        html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            -moz-tab-size: 4;
+            tab-size: 4;
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        body {
+            margin: 0;
+            line-height: inherit
+        }
+
+        hr {
+            height: 0;
+            color: inherit;
+            border-top-width: 1px
+        }
+
+        abbr:where([title]) {
+            -webkit-text-decoration: underline dotted;
+            text-decoration: underline dotted
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: inherit;
+            font-weight: inherit
+        }
+
+        a {
+            color: inherit;
+            text-decoration: inherit
+        }
+
+        b,
+        strong {
+            font-weight: bolder
+        }
+
+        code,
+        kbd,
+        pre,
+        samp {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            font-size: 1em
+        }
+
+        small {
+            font-size: 80%
+        }
+
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline
+        }
+
+        sub {
+            bottom: -.25em
+        }
+
+        sup {
+            top: -.5em
+        }
+
+        table {
+            text-indent: 0;
+            border-color: inherit;
+            border-collapse: collapse
+        }
+
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            font-family: inherit;
+            font-feature-settings: inherit;
+            font-variation-settings: inherit;
+            font-size: 100%;
+            font-weight: inherit;
+            line-height: inherit;
+            letter-spacing: inherit;
+            color: inherit;
+            margin: 0;
+            padding: 0
+        }
+
+        button,
+        select {
+            text-transform: none
+        }
+
+        button,
+        input:where([type=button]),
+        input:where([type=reset]),
+        input:where([type=submit]) {
+            -webkit-appearance: button;
+            background-color: transparent;
+            background-image: none
+        }
+
+        :-moz-focusring {
+            outline: auto
+        }
+
+        :-moz-ui-invalid {
+            box-shadow: none
+        }
+
+        progress {
+            vertical-align: baseline
+        }
+
+        ::-webkit-inner-spin-button,
+        ::-webkit-outer-spin-button {
+            height: auto
+        }
+
+        [type=search] {
+            -webkit-appearance: textfield;
+            outline-offset: -2px
+        }
+
+        ::-webkit-search-decoration {
+            -webkit-appearance: none
+        }
+
+        ::-webkit-file-upload-button {
+            -webkit-appearance: button;
+            font: inherit
+        }
+
+        summary {
+            display: list-item
+        }
+
+        blockquote,
+        dd,
+        dl,
+        figure,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        hr,
+        p,
+        pre {
+            margin: 0
+        }
+
+        fieldset {
+            margin: 0;
+            padding: 0
+        }
+
+        legend {
+            padding: 0
+        }
+
+        menu,
+        ol,
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0
+        }
+
+        dialog {
+            padding: 0
+        }
+
+        textarea {
+            resize: vertical
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            opacity: 1;
+            color: #9ca3af
+        }
+
+        [role=button],
+        button {
+            cursor: pointer
+        }
+
+        :disabled {
+            cursor: default
+        }
+
+        audio,
+        canvas,
+        embed,
+        iframe,
+        img,
+        object,
+        svg,
+        video {
+            display: block;
+            vertical-align: middle
+        }
+
+        img,
+        video {
+            max-width: 100%;
+            height: auto
+        }
+
+        [hidden]:where(:not([hidden=until-found])) {
+            display: none
+        }
+
+        .relative {
+            position: relative
+        }
+
+        .z-10 {
+            z-index: 10
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto
+        }
+
+        .my-3 {
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem
+        }
+
+        .my-4 {
+            margin-top: 1rem;
+            margin-bottom: 1rem
+        }
+
+        .my-8 {
+            margin-top: 2rem;
+            margin-bottom: 2rem
+        }
+
+        .mb-1 {
+            margin-bottom: 0.25rem
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem
+        }
+
+        .mb-8 {
+            margin-bottom: 2rem
+        }
+
+        .mr-2 {
+            margin-right: 0.5rem
+        }
+
+        .mt-1 {
+            margin-top: 0.25rem
+        }
+
+        .mt-2 {
+            margin-top: 0.5rem
+        }
+
+        .mt-4 {
+            margin-top: 1rem
+        }
+
+        .mt-6 {
+            margin-top: 1.5rem
+        }
+
+        .mt-8 {
+            margin-top: 2rem
+        }
+
+        .block {
+            display: block
+        }
+
+        .flex {
+            display: flex
+        }
+
+        .hidden {
+            display: none
+        }
+
+        .aspect-\[4\/3\] {
+            aspect-ratio: 4/3
+        }
+
+        .h-full {
+            height: 100%
+        }
+
+        .min-h-screen {
+            min-height: 100vh
+        }
+
+        .w-full {
+            width: 100%
+        }
+
+        .max-w-2xl {
+            max-width: 42rem
+        }
+
+        .max-w-xl {
+            max-width: 36rem
+        }
+
+        .cursor-pointer {
+            cursor: pointer
+        }
+
+        .flex-col {
+            flex-direction: column
+        }
+
+        .items-center {
+            align-items: center
+        }
+
+        .justify-center {
+            justify-content: center
+        }
+
+        .justify-between {
+            justify-content: space-between
+        }
+
+        .gap-4 {
+            gap: 1rem
+        }
+
+        .rounded {
+            border-radius: 0.25rem
+        }
+
+        .rounded-full {
+            border-radius: 9999px
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem
+        }
+
+        .border-b {
+            border-bottom-width: 1px
+        }
+
+        .border-t {
+            border-top-width: 1px
+        }
+
+        .border-\[\#8A9A80\] {
+            --tw-border-opacity: 1;
+            border-color: rgb(138 154 128 / var(--tw-border-opacity, 1))
+        }
+
+        .bg-\[\#4A5D45\] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(74 93 69 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-\[\#8A9A80\] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(138 154 128 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-gray-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1))
+        }
+
+        .bg-white {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1))
+        }
+
+        .p-4 {
+            padding: 1rem
+        }
+
+        .p-3 {
+            padding: 0.75rem
+        }
+
+        .p-8 {
+            padding: 2rem
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem
+        }
+
+        .px-8 {
+            padding-left: 2rem;
+            padding-right: 2rem
+        }
+
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem
+        }
+
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem
+        }
+
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem
+        }
+
+        .py-6 {
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem
+        }
+
+        .text-left {
+            text-align: left
+        }
+
+        .text-center {
+            text-align: center
+        }
+
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem
+        }
+
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem
+        }
+
+        .text-4xl {
+            font-size: 2.25rem;
+            line-height: 2.5rem
+        }
+
+        .text-5xl {
+            font-size: 3rem;
+            line-height: 1
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem
+        }
+
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem
+        }
+
+        .font-medium {
+            font-weight: 500
+        }
+
+        .font-semibold {
+            font-weight: 600
+        }
+
+        .text-\[\#4A5D45\] {
+            --tw-text-opacity: 1;
+            color: rgb(74 93 69 / var(--tw-text-opacity, 1))
+        }
+
+        .text-black {
+            --tw-text-opacity: 1;
+            color: rgb(0 0 0 / var(--tw-text-opacity, 1))
+        }
+
+        .text-gray-500 {
+            --tw-text-opacity: 1;
+            color: rgb(107 114 128 / var(--tw-text-opacity, 1))
+        }
+
+        .text-gray-600 {
+            --tw-text-opacity: 1;
+            color: rgb(75 85 99 / var(--tw-text-opacity, 1))
+        }
+
+        .text-red-500 {
+            --tw-text-opacity: 1;
+            color: rgb(239 68 68 / var(--tw-text-opacity, 1))
+        }
+
+        .text-white {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+        }
+
+        .underline {
+            -webkit-text-decoration-line: underline;
+            text-decoration-line: underline
+        }
+
+        .shadow-lg {
+            --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .shadow-xl {
+            --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+        .hover\:bg-\[\#3A4D35\]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(58 77 53 / var(--tw-bg-opacity, 1))
+        }
+
+        .hover\:bg-\[\#798A70\]:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(121 138 112 / var(--tw-bg-opacity, 1))
+        }
+
+        .hover\:text-gray-700:hover {
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity, 1))
+        }
+
+        @media (min-width: 640px) {
+            .sm\:flex-row {
+                flex-direction: row
+            }
+        }
+
+        @media (min-width: 768px) {
+            .md\:p-12 {
+                padding: 3rem
+            }
+
+            .md\:text-2xl {
+                font-size: 1.5rem;
+                line-height: 2rem
+            }
+
+            .md\:text-4xl {
+                font-size: 2.25rem;
+                line-height: 2.5rem
+            }
+
+            .md\:text-6xl {
+                font-size: 3.75rem;
+                line-height: 1
+            }
+
+            .md\:text-base {
+                font-size: 1rem;
+                line-height: 1.5rem
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+    <!-- Petal Container -->
+    <div id="petal-container" class="petal-container" style="display: none;">
+        <div class="petal"
+            style="width: 24.4615px; height: 24.4615px; left: 26.3689%; transform: rotate(58.5212deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 15,15 15,25 C15,35 20,40 25,45 C30,40 35,35 35,25 C35,15 30,10 25,5 Z"
+                    fill="#ffdbeb" stroke="#f8c1d9" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 20,18 20,25 C20,32 22,36 25,40 C28,36 30,32 30,25 C30,18 28,14 25,10 Z"
+                    fill="#ffdbeb" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 20.7404px; height: 20.7404px; left: 99.8934%; transform: rotate(234.392deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 10,20 10,30 C10,40 20,45 25,45 C30,45 40,40 40,30 C40,20 30,10 25,5 Z"
+                    fill="#ffffff" stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 15,22 15,30 C15,38 22,40 25,40 C28,40 35,38 35,30 C35,22 28,14 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,25 C24,25 23,26 23,27 C23,28 24,29 25,29 C26,29 27,28 27,27 C27,26 26,25 25,25 Z"
+                    fill="#fff8c6" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 16.1629px; height: 16.1629px; left: 74.8782%; transform: rotate(281.262deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 15,15 15,25 C15,35 20,40 25,45 C30,40 35,35 35,25 C35,15 30,10 25,5 Z"
+                    fill="#ffdbeb" stroke="#f8c1d9" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 20,18 20,25 C20,32 22,36 25,40 C28,36 30,32 30,25 C30,18 28,14 25,10 Z"
+                    fill="#ffdbeb" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 28.1091px; height: 28.1091px; left: 19.9756%; transform: rotate(315.643deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 10,20 10,30 C10,40 20,45 25,45 C30,45 40,40 40,30 C40,20 30,10 25,5 Z"
+                    fill="#ffffff" stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 15,22 15,30 C15,38 22,40 25,40 C28,40 35,38 35,30 C35,22 28,14 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,25 C24,25 23,26 23,27 C23,28 24,29 25,29 C26,29 27,28 27,27 C27,26 26,25 25,25 Z"
+                    fill="#fff8c6" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 32.654px; height: 32.654px; left: 41.9065%; transform: rotate(271.783deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 10,20 10,30 C10,40 20,45 25,45 C30,45 40,40 40,30 C40,20 30,10 25,5 Z"
+                    fill="#ffffff" stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 15,22 15,30 C15,38 22,40 25,40 C28,40 35,38 35,30 C35,22 28,14 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,25 C24,25 23,26 23,27 C23,28 24,29 25,29 C26,29 27,28 27,27 C27,26 26,25 25,25 Z"
+                    fill="#fff8c6" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 31.5475px; height: 31.5475px; left: 4.07072%; transform: rotate(166.164deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 15,15 15,25 C15,35 20,40 25,45 C30,40 35,35 35,25 C35,15 30,10 25,5 Z"
+                    fill="#ffdbeb" stroke="#f8c1d9" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 20,18 20,25 C20,32 22,36 25,40 C28,36 30,32 30,25 C30,18 28,14 25,10 Z"
+                    fill="#ffdbeb" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 34.5298px; height: 34.5298px; left: 4.48387%; transform: rotate(303.798deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 15,15 15,25 C15,35 20,40 25,45 C30,40 35,35 35,25 C35,15 30,10 25,5 Z"
+                    fill="#ffdbeb" stroke="#f8c1d9" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 20,18 20,25 C20,32 22,36 25,40 C28,36 30,32 30,25 C30,18 28,14 25,10 Z"
+                    fill="#ffdbeb" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 34.7955px; height: 34.7955px; left: 41.3407%; transform: rotate(123.49deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 15,15 15,25 C15,35 20,40 25,45 C30,40 35,35 35,25 C35,15 30,10 25,5 Z"
+                    fill="#ffdbeb" stroke="#f8c1d9" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 20,18 20,25 C20,32 22,36 25,40 C28,36 30,32 30,25 C30,18 28,14 25,10 Z"
+                    fill="#ffdbeb" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 32.4143px; height: 32.4143px; left: 83.6386%; transform: rotate(164.778deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 10,20 10,30 C10,40 20,45 25,45 C30,45 40,40 40,30 C40,20 30,10 25,5 Z"
+                    fill="#ffffff" stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 15,22 15,30 C15,38 22,40 25,40 C28,40 35,38 35,30 C35,22 28,14 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,25 C24,25 23,26 23,27 C23,28 24,29 25,29 C26,29 27,28 27,27 C27,26 26,25 25,25 Z"
+                    fill="#fff8c6" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 27.9096px; height: 27.9096px; left: 9.98651%; transform: rotate(67.1954deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 15,15 15,25 C15,35 20,40 25,45 C30,40 35,35 35,25 C35,15 30,10 25,5 Z"
+                    fill="#ffdbeb" stroke="#f8c1d9" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 20,18 20,25 C20,32 22,36 25,40 C28,36 30,32 30,25 C30,18 28,14 25,10 Z"
+                    fill="#ffdbeb" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 21.5513px; height: 21.5513px; left: 19.8432%; transform: rotate(323.018deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 10,20 10,30 C10,40 20,45 25,45 C30,45 40,40 40,30 C40,20 30,10 25,5 Z"
+                    fill="#ffffff" stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 15,22 15,30 C15,38 22,40 25,40 C28,40 35,38 35,30 C35,22 28,14 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,25 C24,25 23,26 23,27 C23,28 24,29 25,29 C26,29 27,28 27,27 C27,26 26,25 25,25 Z"
+                    fill="#fff8c6" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 29.5487px; height: 29.5487px; left: 26.175%; transform: rotate(203.728deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,5 5,15 5,25 C5,35 15,45 25,45 C35,45 45,35 45,25 C45,15 35,5 25,5 Z" fill="#ffffff"
+                    stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C18,10 10,18 10,25 C10,32 18,40 25,40 C32,40 40,32 40,25 C40,18 32,10 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,15 C20,15 15,20 15,25 C15,30 20,35 25,35 C30,35 35,30 35,25 C35,20 30,15 25,15 Z"
+                    fill="#f8f8f8" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 29.2101px; height: 29.2101px; left: 86.9998%; transform: rotate(48.5805deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,10 10,15 10,25 C10,35 15,40 25,45 C35,40 40,35 40,25 C40,15 35,10 25,5 Z"
+                    fill="#8A9A80" stroke="#798A70" stroke-width="0.5"></path>
+                <path d="M25,10 C18,14 15,18 15,25 C15,32 18,36 25,40 C32,36 35,32 35,25 C35,18 32,14 25,10 Z"
+                    fill="#8A9A80" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 16.5884px; height: 16.5884px; left: 89.1186%; transform: rotate(120.645deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 15,15 15,25 C15,35 20,40 25,45 C30,40 35,35 35,25 C35,15 30,10 25,5 Z"
+                    fill="#ffdbeb" stroke="#f8c1d9" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 20,18 20,25 C20,32 22,36 25,40 C28,36 30,32 30,25 C30,18 28,14 25,10 Z"
+                    fill="#ffdbeb" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 22.9052px; height: 22.9052px; left: 66.3376%; transform: rotate(351.418deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,5 5,15 5,25 C5,35 15,45 25,45 C35,45 45,35 45,25 C45,15 35,5 25,5 Z" fill="#f8d7da"
+                    stroke="#e8c7ca" stroke-width="0.5"></path>
+                <path d="M25,10 C18,10 10,18 10,25 C10,32 18,40 25,40 C32,40 40,32 40,25 C40,18 32,10 25,10 Z"
+                    fill="#f8d7da" stroke="none"></path>
+                <path d="M25,15 C20,15 15,20 15,25 C15,30 20,35 25,35 C30,35 35,30 35,25 C35,20 30,15 25,15 Z"
+                    fill="#fadadd" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 23.9504px; height: 23.9504px; left: 81.7658%; transform: rotate(98.4818deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,5 5,15 5,25 C5,35 15,45 25,45 C35,45 45,35 45,25 C45,15 35,5 25,5 Z" fill="#ffffff"
+                    stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C18,10 10,18 10,25 C10,32 18,40 25,40 C32,40 40,32 40,25 C40,18 32,10 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,15 C20,15 15,20 15,25 C15,30 20,35 25,35 C30,35 35,30 35,25 C35,20 30,15 25,15 Z"
+                    fill="#f8f8f8" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 15.3364px; height: 15.3364px; left: 35.1335%; transform: rotate(295.558deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,5 5,15 5,25 C5,35 15,45 25,45 C35,45 45,35 45,25 C45,15 35,5 25,5 Z" fill="#f8d7da"
+                    stroke="#e8c7ca" stroke-width="0.5"></path>
+                <path d="M25,10 C18,10 10,18 10,25 C10,32 18,40 25,40 C32,40 40,32 40,25 C40,18 32,10 25,10 Z"
+                    fill="#f8d7da" stroke="none"></path>
+                <path d="M25,15 C20,15 15,20 15,25 C15,30 20,35 25,35 C30,35 35,30 35,25 C35,20 30,15 25,15 Z"
+                    fill="#fadadd" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 28.948px; height: 28.948px; left: 9.12769%; transform: rotate(355.477deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,10 10,15 10,25 C10,35 15,40 25,45 C35,40 40,35 40,25 C40,15 35,10 25,5 Z"
+                    fill="#8A9A80" stroke="#798A70" stroke-width="0.5"></path>
+                <path d="M25,10 C18,14 15,18 15,25 C15,32 18,36 25,40 C32,36 35,32 35,25 C35,18 32,14 25,10 Z"
+                    fill="#8A9A80" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 25.9431px; height: 25.9431px; left: 99.5243%; transform: rotate(279.525deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,10 10,15 10,25 C10,35 15,40 25,45 C35,40 40,35 40,25 C40,15 35,10 25,5 Z"
+                    fill="#8A9A80" stroke="#798A70" stroke-width="0.5"></path>
+                <path d="M25,10 C18,14 15,18 15,25 C15,32 18,36 25,40 C32,36 35,32 35,25 C35,18 32,14 25,10 Z"
+                    fill="#8A9A80" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 29.4815px; height: 29.4815px; left: 25.7314%; transform: rotate(232.977deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,5 5,15 5,25 C5,35 15,45 25,45 C35,45 45,35 45,25 C45,15 35,5 25,5 Z" fill="#ffffff"
+                    stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C18,10 10,18 10,25 C10,32 18,40 25,40 C32,40 40,32 40,25 C40,18 32,10 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,15 C20,15 15,20 15,25 C15,30 20,35 25,35 C30,35 35,30 35,25 C35,20 30,15 25,15 Z"
+                    fill="#f8f8f8" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 16.7752px; height: 16.7752px; left: 12.4723%; transform: rotate(271.172deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 10,20 10,30 C10,40 20,45 25,45 C30,45 40,40 40,30 C40,20 30,10 25,5 Z"
+                    fill="#ffffff" stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 15,22 15,30 C15,38 22,40 25,40 C28,40 35,38 35,30 C35,22 28,14 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,25 C24,25 23,26 23,27 C23,28 24,29 25,29 C26,29 27,28 27,27 C27,26 26,25 25,25 Z"
+                    fill="#fff8c6" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 28.3663px; height: 28.3663px; left: 68.231%; transform: rotate(142.989deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,5 5,15 5,25 C5,35 15,45 25,45 C35,45 45,35 45,25 C45,15 35,5 25,5 Z" fill="#ffffff"
+                    stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C18,10 10,18 10,25 C10,32 18,40 25,40 C32,40 40,32 40,25 C40,18 32,10 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,15 C20,15 15,20 15,25 C15,30 20,35 25,35 C30,35 35,30 35,25 C35,20 30,15 25,15 Z"
+                    fill="#f8f8f8" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 29.7317px; height: 29.7317px; left: 53.5966%; transform: rotate(259.347deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,5 5,15 5,25 C5,35 15,45 25,45 C35,45 45,35 45,25 C45,15 35,5 25,5 Z" fill="#f8d7da"
+                    stroke="#e8c7ca" stroke-width="0.5"></path>
+                <path d="M25,10 C18,10 10,18 10,25 C10,32 18,40 25,40 C32,40 40,32 40,25 C40,18 32,10 25,10 Z"
+                    fill="#f8d7da" stroke="none"></path>
+                <path d="M25,15 C20,15 15,20 15,25 C15,30 20,35 25,35 C30,35 35,30 35,25 C35,20 30,15 25,15 Z"
+                    fill="#fadadd" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 30.0789px; height: 30.0789px; left: 59.9658%; transform: rotate(151.486deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 15,15 15,25 C15,35 20,40 25,45 C30,40 35,35 35,25 C35,15 30,10 25,5 Z"
+                    fill="#ffdbeb" stroke="#f8c1d9" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 20,18 20,25 C20,32 22,36 25,40 C28,36 30,32 30,25 C30,18 28,14 25,10 Z"
+                    fill="#ffdbeb" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 30.5507px; height: 30.5507px; left: 15.2948%; transform: rotate(309.668deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,10 10,15 10,25 C10,35 15,40 25,45 C35,40 40,35 40,25 C40,15 35,10 25,5 Z"
+                    fill="#8A9A80" stroke="#798A70" stroke-width="0.5"></path>
+                <path d="M25,10 C18,14 15,18 15,25 C15,32 18,36 25,40 C32,36 35,32 35,25 C35,18 32,14 25,10 Z"
+                    fill="#8A9A80" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 34.5092px; height: 34.5092px; left: 40.7188%; transform: rotate(208.245deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 15,15 15,25 C15,35 20,40 25,45 C30,40 35,35 35,25 C35,15 30,10 25,5 Z"
+                    fill="#ffdbeb" stroke="#f8c1d9" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 20,18 20,25 C20,32 22,36 25,40 C28,36 30,32 30,25 C30,18 28,14 25,10 Z"
+                    fill="#ffdbeb" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 32.2647px; height: 32.2647px; left: 80.3617%; transform: rotate(157.923deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 10,20 10,30 C10,40 20,45 25,45 C30,45 40,40 40,30 C40,20 30,10 25,5 Z"
+                    fill="#ffffff" stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 15,22 15,30 C15,38 22,40 25,40 C28,40 35,38 35,30 C35,22 28,14 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,25 C24,25 23,26 23,27 C23,28 24,29 25,29 C26,29 27,28 27,27 C27,26 26,25 25,25 Z"
+                    fill="#fff8c6" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 30.8432px; height: 30.8432px; left: 13.0187%; transform: rotate(44.8558deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 10,20 10,30 C10,40 20,45 25,45 C30,45 40,40 40,30 C40,20 30,10 25,5 Z"
+                    fill="#ffffff" stroke="#f0f0f0" stroke-width="0.5"></path>
+                <path d="M25,10 C22,14 15,22 15,30 C15,38 22,40 25,40 C28,40 35,38 35,30 C35,22 28,14 25,10 Z"
+                    fill="#ffffff" stroke="none"></path>
+                <path d="M25,25 C24,25 23,26 23,27 C23,28 24,29 25,29 C26,29 27,28 27,27 C27,26 26,25 25,25 Z"
+                    fill="#fff8c6" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 15.6592px; height: 15.6592px; left: 53.8483%; transform: rotate(209.81deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,5 5,15 5,25 C5,35 15,45 25,45 C35,45 45,35 45,25 C45,15 35,5 25,5 Z" fill="#f8d7da"
+                    stroke="#e8c7ca" stroke-width="0.5"></path>
+                <path d="M25,10 C18,10 10,18 10,25 C10,32 18,40 25,40 C32,40 40,32 40,25 C40,18 32,10 25,10 Z"
+                    fill="#f8d7da" stroke="none"></path>
+                <path d="M25,15 C20,15 15,20 15,25 C15,30 20,35 25,35 C30,35 35,30 35,25 C35,20 30,15 25,15 Z"
+                    fill="#fadadd" stroke="none"></path>
+            </svg></div>
+        <div class="petal"
+            style="width: 20.9047px; height: 20.9047px; left: 90.1115%; transform: rotate(301.035deg); animation: auto ease 0s 1 normal none running none;">
+            <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,5 5,15 5,25 C5,35 15,45 25,45 C35,45 45,35 45,25 C45,15 35,5 25,5 Z" fill="#f8d7da"
+                    stroke="#e8c7ca" stroke-width="0.5"></path>
+                <path d="M25,10 C18,10 10,18 10,25 C10,32 18,40 25,40 C32,40 40,32 40,25 C40,18 32,10 25,10 Z"
+                    fill="#f8d7da" stroke="none"></path>
+                <path d="M25,15 C20,15 15,20 15,25 C15,30 20,35 25,35 C30,35 35,30 35,25 C35,20 30,15 25,15 Z"
+                    fill="#fadadd" stroke="none"></path>
+            </svg></div>
+    </div>
+
+    <!-- Admin Toggle Button -->
+    <button id="admin-toggle" class="admin-toggle" title="View Responses">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+    </button>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="admin-panel">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold text-[#4A5D45]">RSVP Responses</h2>
+            <button id="close-admin" class="text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="mb-4">
+            <p class="text-sm text-gray-600 mb-2">Enter the admin password to view responses:</p>
+            <div class="flex">
+                <input type="password" id="admin-password" class="form-input mr-2" placeholder="Password">
+                <div data-lastpass-icon-root=""
+                    style="position: relative !important; height: 0px !important; width: 0px !important; float: left !important;">
+                </div><button id="login-btn" class="bg-[#4A5D45] text-white px-4 py-2 rounded">Login</button>
+            </div>
+            <p id="password-error" class="text-red-500 text-sm mt-1 hidden">Incorrect password</p>
+        </div>
+
+        <div id="responses-container" class="hidden">
+            <div class="flex justify-between mb-4">
+                <h3 class="text-lg font-medium">Guest Responses</h3>
+                <button id="export-csv" class="text-[#4A5D45] text-sm underline">Export to CSV</button>
+            </div>
+
+            <div class="bg-gray-100 p-3 mb-4 rounded">
+                <div class="flex justify-between">
+                    <span class="font-medium">Total Responses:</span>
+                    <span id="total-count">0</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="font-medium">Accepted:</span>
+                    <span id="accepted-count">0</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="font-medium">Declined:</span>
+                    <span id="declined-count">0</span>
+                </div>
+            </div>
+
+            <div id="response-list" class="mt-4">
+                <!-- Responses will be populated here -->
+                <p class="text-gray-500 text-center py-4">No responses yet</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-2xl w-full mx-auto">
+        <!-- Envelope -->
+        <div id="envelope" class="envelope relative w-full aspect-[4/3] mx-auto cursor-pointer mb-8 open"
+            style="perspective: 1500px;">
+            <!-- Shimmer Effect -->
+            <div id="envelope-shimmer" class="shimmer"
+                style="opacity: 0; animation: auto ease 0s 1 normal none running none;"></div>
+
+            <!-- Envelope Front - Completely redesigned without wax seal -->
+            <div
+                class="envelope-front bg-[#8A9A80] rounded-lg shadow-lg w-full h-full flex flex-col items-center justify-center p-8">
+                <!-- Decorative elements instead of wax seal -->
+                <div class="envelope-decoration">
+                    <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                        <!-- Decorative corner flourishes -->
+                        <path d="M20,20 C40,40 60,30 80,20" stroke="#4A5D45" stroke-width="1" fill="none" opacity="0.5">
+                        </path>
+                        <path d="M20,280 C40,260 60,270 80,280" stroke="#4A5D45" stroke-width="1" fill="none"
+                            opacity="0.5"></path>
+                        <path d="M380,20 C360,40 340,30 320,20" stroke="#4A5D45" stroke-width="1" fill="none"
+                            opacity="0.5"></path>
+                        <path d="M380,280 C360,260 340,270 320,280" stroke="#4A5D45" stroke-width="1" fill="none"
+                            opacity="0.5"></path>
+
+                        <!-- Subtle border frame -->
+                        <rect x="15" y="15" width="370" height="270" stroke="#4A5D45" stroke-width="1" fill="none"
+                            opacity="0.3" rx="5" ry="5"></rect>
+                    </svg>
+                </div>
+
+                <div class="script text-5xl md:text-6xl text-black mb-4 text-center">You're Invited</div>
+                <div class="serif text-xl md:text-2xl text-black text-center">
+                    To the Wedding Rehearsal Dinner of<br>
+                    <span class="script text-3xl md:text-4xl text-black my-3 block">Shannon &amp; Haden</span>
+                </div>
+
+                <!-- Clear click instruction - no wax seal -->
+                <div class="click-instruction text-center text-black mt-8">
+                    <p class="text-sm md:text-base font-medium">Click to open</p>
+                </div>
+            </div>
+
+            <!-- Envelope Back -->
+            <div
+                class="envelope-back bg-[#8A9A80] rounded-lg shadow-lg w-full h-full flex items-center justify-center p-8">
+                <div class="text-center text-black">
+                    <p class="serif text-xl">Please see your invitation below</p>
+                    <p class="mt-4 text-sm">Click anywhere to close envelope</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invitation Card -->
+        <div id="card" class="card relative bg-white rounded-lg shadow-xl p-8 md:p-12 max-w-xl mx-auto show">
+            <!-- Card Shimmer Effect -->
+            <div id="card-shimmer" class="shimmer"
+                style="opacity: 0; animation: auto ease 0s 1 normal none running none;"></div>
+
+            <!-- Floral corners SVG - Elegant Calla Lily Design -->
+            <div class="floral-corner top-left">
+                <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Main stem -->
+                    <path d="M30,120 Q45,90 40,60 Q35,30 50,10" fill="none" stroke="#4A5D45" stroke-width="1.5"
+                        stroke-linecap="round"></path>
+
+                    <!-- Leaves -->
+                    <path d="M40,60 Q55,65 50,80 Q35,75 40,60" fill="#8A9A80" stroke="#4A5D45" stroke-width="0.8">
+                    </path>
+                    <path d="M35,90 Q50,95 45,110 Q30,105 35,90" fill="#8A9A80" stroke="#4A5D45" stroke-width="0.8">
+                    </path>
+
+                    <!-- Calla Lily 1 -->
+                    <path d="M50,10 Q65,15 70,30 Q60,45 45,40 Q40,25 50,10" fill="#FFFFFF" stroke="#4A5D45"
+                        stroke-width="0.8"></path>
+                    <path d="M57,25 Q58,20 60,18" fill="none" stroke="#4A5D45" stroke-width="1" stroke-linecap="round">
+                    </path>
+                    <ellipse cx="60" cy="18" rx="2" ry="4" fill="#8A9A80" transform="rotate(-20 60 18)"></ellipse>
+
+                    <!-- Calla Lily 2 - smaller -->
+                    <path d="M45,45 Q55,48 58,58 Q52,68 42,65 Q38,55 45,45" fill="#FFFFFF" stroke="#4A5D45"
+                        stroke-width="0.8"></path>
+                    <path d="M50,55 Q51,52 52,50" fill="none" stroke="#4A5D45" stroke-width="0.8"
+                        stroke-linecap="round"></path>
+                    <ellipse cx="52" cy="50" rx="1.5" ry="3" fill="#8A9A80" transform="rotate(-20 52 50)"></ellipse>
+
+                    <!-- Decorative swirls -->
+                    <path d="M70,100 Q80,90 90,95 Q95,100 90,105 Q85,107 80,105" fill="none" stroke="#4A5D45"
+                        stroke-width="0.8" stroke-linecap="round"></path>
+                    <path d="M75,120 Q85,115 95,118 Q100,122 95,125 Q90,127 85,125" fill="none" stroke="#4A5D45"
+                        stroke-width="0.8" stroke-linecap="round"></path>
+
+                    <!-- Small accent flowers -->
+                    <g transform="translate(90,95)">
+                        <circle cx="0" cy="0" r="3" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="0" cy="0" r="1" fill="#8A9A80"></circle>
+                        <circle cx="3" cy="3" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="3" cy="3" r="0.7" fill="#8A9A80"></circle>
+                        <circle cx="-2" cy="4" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="-2" cy="4" r="0.7" fill="#8A9A80"></circle>
+                    </g>
+
+                    <g transform="translate(95,125)">
+                        <circle cx="0" cy="0" r="3" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="0" cy="0" r="1" fill="#8A9A80"></circle>
+                        <circle cx="3" cy="-2" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="3" cy="-2" r="0.7" fill="#8A9A80"></circle>
+                        <circle cx="-2" cy="-3" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="-2" cy="-3" r="0.7" fill="#8A9A80"></circle>
+                    </g>
+
+                    <!-- Thin decorative lines -->
+                    <path d="M100,85 Q110,80 120,85" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                    <path d="M105,75 Q115,70 125,75" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                    <path d="M110,65 Q120,60 130,65" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                </svg>
+            </div>
+            <div class="floral-corner top-right">
+                <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Main stem -->
+                    <path d="M30,120 Q45,90 40,60 Q35,30 50,10" fill="none" stroke="#4A5D45" stroke-width="1.5"
+                        stroke-linecap="round"></path>
+
+                    <!-- Leaves -->
+                    <path d="M40,60 Q55,65 50,80 Q35,75 40,60" fill="#8A9A80" stroke="#4A5D45" stroke-width="0.8">
+                    </path>
+                    <path d="M35,90 Q50,95 45,110 Q30,105 35,90" fill="#8A9A80" stroke="#4A5D45" stroke-width="0.8">
+                    </path>
+
+                    <!-- Calla Lily 1 -->
+                    <path d="M50,10 Q65,15 70,30 Q60,45 45,40 Q40,25 50,10" fill="#FFFFFF" stroke="#4A5D45"
+                        stroke-width="0.8"></path>
+                    <path d="M57,25 Q58,20 60,18" fill="none" stroke="#4A5D45" stroke-width="1" stroke-linecap="round">
+                    </path>
+                    <ellipse cx="60" cy="18" rx="2" ry="4" fill="#8A9A80" transform="rotate(-20 60 18)"></ellipse>
+
+                    <!-- Calla Lily 2 - smaller -->
+                    <path d="M45,45 Q55,48 58,58 Q52,68 42,65 Q38,55 45,45" fill="#FFFFFF" stroke="#4A5D45"
+                        stroke-width="0.8"></path>
+                    <path d="M50,55 Q51,52 52,50" fill="none" stroke="#4A5D45" stroke-width="0.8"
+                        stroke-linecap="round"></path>
+                    <ellipse cx="52" cy="50" rx="1.5" ry="3" fill="#8A9A80" transform="rotate(-20 52 50)"></ellipse>
+
+                    <!-- Decorative swirls -->
+                    <path d="M70,100 Q80,90 90,95 Q95,100 90,105 Q85,107 80,105" fill="none" stroke="#4A5D45"
+                        stroke-width="0.8" stroke-linecap="round"></path>
+                    <path d="M75,120 Q85,115 95,118 Q100,122 95,125 Q90,127 85,125" fill="none" stroke="#4A5D45"
+                        stroke-width="0.8" stroke-linecap="round"></path>
+
+                    <!-- Small accent flowers -->
+                    <g transform="translate(90,95)">
+                        <circle cx="0" cy="0" r="3" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="0" cy="0" r="1" fill="#8A9A80"></circle>
+                        <circle cx="3" cy="3" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="3" cy="3" r="0.7" fill="#8A9A80"></circle>
+                        <circle cx="-2" cy="4" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="-2" cy="4" r="0.7" fill="#8A9A80"></circle>
+                    </g>
+
+                    <g transform="translate(95,125)">
+                        <circle cx="0" cy="0" r="3" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="0" cy="0" r="1" fill="#8A9A80"></circle>
+                        <circle cx="3" cy="-2" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="3" cy="-2" r="0.7" fill="#8A9A80"></circle>
+                        <circle cx="-2" cy="-3" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="-2" cy="-3" r="0.7" fill="#8A9A80"></circle>
+                    </g>
+
+                    <!-- Thin decorative lines -->
+                    <path d="M100,85 Q110,80 120,85" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                    <path d="M105,75 Q115,70 125,75" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                    <path d="M110,65 Q120,60 130,65" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                </svg>
+            </div>
+            <div class="floral-corner bottom-left">
+                <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Main stem -->
+                    <path d="M30,120 Q45,90 40,60 Q35,30 50,10" fill="none" stroke="#4A5D45" stroke-width="1.5"
+                        stroke-linecap="round"></path>
+
+                    <!-- Leaves -->
+                    <path d="M40,60 Q55,65 50,80 Q35,75 40,60" fill="#8A9A80" stroke="#4A5D45" stroke-width="0.8">
+                    </path>
+                    <path d="M35,90 Q50,95 45,110 Q30,105 35,90" fill="#8A9A80" stroke="#4A5D45" stroke-width="0.8">
+                    </path>
+
+                    <!-- Calla Lily 1 -->
+                    <path d="M50,10 Q65,15 70,30 Q60,45 45,40 Q40,25 50,10" fill="#FFFFFF" stroke="#4A5D45"
+                        stroke-width="0.8"></path>
+                    <path d="M57,25 Q58,20 60,18" fill="none" stroke="#4A5D45" stroke-width="1" stroke-linecap="round">
+                    </path>
+                    <ellipse cx="60" cy="18" rx="2" ry="4" fill="#8A9A80" transform="rotate(-20 60 18)"></ellipse>
+
+                    <!-- Calla Lily 2 - smaller -->
+                    <path d="M45,45 Q55,48 58,58 Q52,68 42,65 Q38,55 45,45" fill="#FFFFFF" stroke="#4A5D45"
+                        stroke-width="0.8"></path>
+                    <path d="M50,55 Q51,52 52,50" fill="none" stroke="#4A5D45" stroke-width="0.8"
+                        stroke-linecap="round"></path>
+                    <ellipse cx="52" cy="50" rx="1.5" ry="3" fill="#8A9A80" transform="rotate(-20 52 50)"></ellipse>
+
+                    <!-- Decorative swirls -->
+                    <path d="M70,100 Q80,90 90,95 Q95,100 90,105 Q85,107 80,105" fill="none" stroke="#4A5D45"
+                        stroke-width="0.8" stroke-linecap="round"></path>
+                    <path d="M75,120 Q85,115 95,118 Q100,122 95,125 Q90,127 85,125" fill="none" stroke="#4A5D45"
+                        stroke-width="0.8" stroke-linecap="round"></path>
+
+                    <!-- Small accent flowers -->
+                    <g transform="translate(90,95)">
+                        <circle cx="0" cy="0" r="3" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="0" cy="0" r="1" fill="#8A9A80"></circle>
+                        <circle cx="3" cy="3" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="3" cy="3" r="0.7" fill="#8A9A80"></circle>
+                        <circle cx="-2" cy="4" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="-2" cy="4" r="0.7" fill="#8A9A80"></circle>
+                    </g>
+
+                    <g transform="translate(95,125)">
+                        <circle cx="0" cy="0" r="3" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="0" cy="0" r="1" fill="#8A9A80"></circle>
+                        <circle cx="3" cy="-2" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="3" cy="-2" r="0.7" fill="#8A9A80"></circle>
+                        <circle cx="-2" cy="-3" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="-2" cy="-3" r="0.7" fill="#8A9A80"></circle>
+                    </g>
+
+                    <!-- Thin decorative lines -->
+                    <path d="M100,85 Q110,80 120,85" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                    <path d="M105,75 Q115,70 125,75" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                    <path d="M110,65 Q120,60 130,65" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                </svg>
+            </div>
+            <div class="floral-corner bottom-right">
+                <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Main stem -->
+                    <path d="M30,120 Q45,90 40,60 Q35,30 50,10" fill="none" stroke="#4A5D45" stroke-width="1.5"
+                        stroke-linecap="round"></path>
+
+                    <!-- Leaves -->
+                    <path d="M40,60 Q55,65 50,80 Q35,75 40,60" fill="#8A9A80" stroke="#4A5D45" stroke-width="0.8">
+                    </path>
+                    <path d="M35,90 Q50,95 45,110 Q30,105 35,90" fill="#8A9A80" stroke="#4A5D45" stroke-width="0.8">
+                    </path>
+
+                    <!-- Calla Lily 1 -->
+                    <path d="M50,10 Q65,15 70,30 Q60,45 45,40 Q40,25 50,10" fill="#FFFFFF" stroke="#4A5D45"
+                        stroke-width="0.8"></path>
+                    <path d="M57,25 Q58,20 60,18" fill="none" stroke="#4A5D45" stroke-width="1" stroke-linecap="round">
+                    </path>
+                    <ellipse cx="60" cy="18" rx="2" ry="4" fill="#8A9A80" transform="rotate(-20 60 18)"></ellipse>
+
+                    <!-- Calla Lily 2 - smaller -->
+                    <path d="M45,45 Q55,48 58,58 Q52,68 42,65 Q38,55 45,45" fill="#FFFFFF" stroke="#4A5D45"
+                        stroke-width="0.8"></path>
+                    <path d="M50,55 Q51,52 52,50" fill="none" stroke="#4A5D45" stroke-width="0.8"
+                        stroke-linecap="round"></path>
+                    <ellipse cx="52" cy="50" rx="1.5" ry="3" fill="#8A9A80" transform="rotate(-20 52 50)"></ellipse>
+
+                    <!-- Decorative swirls -->
+                    <path d="M70,100 Q80,90 90,95 Q95,100 90,105 Q85,107 80,105" fill="none" stroke="#4A5D45"
+                        stroke-width="0.8" stroke-linecap="round"></path>
+                    <path d="M75,120 Q85,115 95,118 Q100,122 95,125 Q90,127 85,125" fill="none" stroke="#4A5D45"
+                        stroke-width="0.8" stroke-linecap="round"></path>
+
+                    <!-- Small accent flowers -->
+                    <g transform="translate(90,95)">
+                        <circle cx="0" cy="0" r="3" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="0" cy="0" r="1" fill="#8A9A80"></circle>
+                        <circle cx="3" cy="3" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="3" cy="3" r="0.7" fill="#8A9A80"></circle>
+                        <circle cx="-2" cy="4" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="-2" cy="4" r="0.7" fill="#8A9A80"></circle>
+                    </g>
+
+                    <g transform="translate(95,125)">
+                        <circle cx="0" cy="0" r="3" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="0" cy="0" r="1" fill="#8A9A80"></circle>
+                        <circle cx="3" cy="-2" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="3" cy="-2" r="0.7" fill="#8A9A80"></circle>
+                        <circle cx="-2" cy="-3" r="2" fill="#FFFFFF" stroke="#4A5D45" stroke-width="0.5"></circle>
+                        <circle cx="-2" cy="-3" r="0.7" fill="#8A9A80"></circle>
+                    </g>
+
+                    <!-- Thin decorative lines -->
+                    <path d="M100,85 Q110,80 120,85" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                    <path d="M105,75 Q115,70 125,75" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                    <path d="M110,65 Q120,60 130,65" fill="none" stroke="#4A5D45" stroke-width="0.5"
+                        stroke-linecap="round"></path>
+                </svg>
+            </div>
+
+            <div class="text-center z-10 relative fade-in">
+                <h1 class="script text-5xl text-[#4A5D45] mb-6">Wedding Rehearsal Dinner</h1>
+
+                <div class="serif text-xl mb-8 text-black">
+                    <p class="mb-1">Please join us for the rehearsal dinner</p>
+                    <p class="mb-1">in celebration of</p>
+                    <h2 class="script text-4xl text-[#4A5D45] my-4">Shannon &amp; Haden</h2>
+                </div>
+
+                <div class="my-8 py-6 border-t border-b border-[#8A9A80]">
+                    <p class="serif text-xl mb-2 text-black">Friday, July 18th, 2025</p>
+                    <p class="serif text-xl mb-2 text-black">6:00 PM</p>
+                    <p class="serif text-xl text-black">The Chalet Dining Room at Horseshoe Resort</p>
+                    <p class="text-sm mt-2 text-black">1101 Horseshoe Valley Road, Barrie, ON, L4M 4Y8</p>
+                </div>
+
+                <div class="mb-8">
+                    <p class="text-black">Cocktail attire</p>
+                    <p class="text-black mt-2">Dinner &amp; drinks</p>
+                </div>
+
+                <div id="rsvp-section">
+                    <p class="mb-4 text-black">Kindly respond by July 6th, 2025</p>
+
+                    <div class="mb-6">
+                        <label for="guest-name" class="form-label text-left">Your Names</label>
+                        <input type="text" id="guest-name" class="form-input"
+                            placeholder="Enter full names of all attending guests">
+                        <p class="text-xs text-gray-500 mt-1">For couples, please include both names (e.g., "John &amp;
+                            Jane Smith")</p>
+
+                        <label for="guest-email" class="form-label text-left mt-4">Email Address</label>
+                        <input type="email" id="guest-email" class="form-input" placeholder="Enter your email address">
+
+                        <label for="guest-count" class="form-label text-left mt-4">Number of Guests</label>
+                        <select id="guest-count" class="form-input">
+                            <option value="1">1 person</option>
+                            <option value="2">2 people</option>
+                            <option value="3">3 people</option>
+                            <option value="4">4 people</option>
+                        </select>
+
+                        <label for="dietary-restrictions" class="form-label text-left mt-4">Dietary Restrictions</label>
+                        <textarea id="dietary-restrictions" class="form-input" rows="2"
+                            placeholder="Please list any dietary restrictions or allergies"></textarea>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+                        <button class="btn-rsvp bg-[#4A5D45] text-white py-3 px-8 rounded-full hover:bg-[#3A4D35]"
+                            onclick="respond('accept')">
+                            Joyfully Accept
+                        </button>
+                        <button class="btn-rsvp bg-[#8A9A80] text-white py-3 px-8 rounded-full hover:bg-[#798A70]"
+                            onclick="respond('decline')">
+                            Regretfully Decline
+                        </button>
+                    </div>
+                    <div data-lastpass-icon-root=""
+                        style="position: relative !important; height: 0px !important; width: 0px !important; float: left !important;">
+                    </div>
+                </div>
+
+                <div id="thank-you" class="thank-you mt-6">
+                    <p class="text-xl text-[#4A5D45] serif" id="response-message"></p>
+                    <p class="mt-4 text-black">Thank you for your response!</p>
+                </div>
+
+                <div class="mt-8 text-sm text-[#4A5D45]">
+                    <p>Questions? Contact us at <span class="underline">4nataliehiles@gmail.com</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+        const card = document.getElementById('card');
+        const thankYouSection = document.getElementById('thank-you');
+        const rsvpSection = document.getElementById('rsvp-section');
+        const responseMessage = document.getElementById('response-message');
+        const petalContainer = document.getElementById('petal-container');
+        const envelopeShimmer = document.getElementById('envelope-shimmer');
+        const cardShimmer = document.getElementById('card-shimmer');
+
+        // Admin panel elements
+        const adminToggle = document.getElementById('admin-toggle');
+        const adminPanel = document.getElementById('admin-panel');
+        const closeAdmin = document.getElementById('close-admin');
+        const adminPassword = document.getElementById('admin-password');
+        const loginBtn = document.getElementById('login-btn');
+        const passwordError = document.getElementById('password-error');
+        const responsesContainer = document.getElementById('responses-container');
+        const responseList = document.getElementById('response-list');
+        const totalCount = document.getElementById('total-count');
+        const acceptedCount = document.getElementById('accepted-count');
+        const declinedCount = document.getElementById('declined-count');
+        const exportCsv = document.getElementById('export-csv');
+
+        // Set admin password - you can change this to your preferred password
+        const ADMIN_PASSWORD = "wedding2025";
+
+        // Initialize responses array from localStorage or create empty array
+        let responses = JSON.parse(localStorage.getItem('weddingResponses')) || [];
+
+        // Clone floral corners
+        document.querySelectorAll('.floral-corner').forEach(corner => {
+            if (!corner.classList.contains('top-left')) {
+                corner.innerHTML = document.querySelector('.floral-corner.top-left').innerHTML;
+            }
+        });
+
+        // Define realistic flower petal SVGs
+        const petalSVGs = [
+            // Rose petal 1 - soft pink
+            `<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,5 5,15 5,25 C5,35 15,45 25,45 C35,45 45,35 45,25 C45,15 35,5 25,5 Z" fill="#f8d7da" stroke="#e8c7ca" stroke-width="0.5"/>
+                <path d="M25,10 C18,10 10,18 10,25 C10,32 18,40 25,40 C32,40 40,32 40,25 C40,18 32,10 25,10 Z" fill="#f8d7da" stroke="none"/>
+                <path d="M25,15 C20,15 15,20 15,25 C15,30 20,35 25,35 C30,35 35,30 35,25 C35,20 30,15 25,15 Z" fill="#fadadd" stroke="none"/>
+            </svg>`,
+
+            // Rose petal 2 - white
+            `<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,5 5,15 5,25 C5,35 15,45 25,45 C35,45 45,35 45,25 C45,15 35,5 25,5 Z" fill="#ffffff" stroke="#f0f0f0" stroke-width="0.5"/>
+                <path d="M25,10 C18,10 10,18 10,25 C10,32 18,40 25,40 C32,40 40,32 40,25 C40,18 32,10 25,10 Z" fill="#ffffff" stroke="none"/>
+                <path d="M25,15 C20,15 15,20 15,25 C15,30 20,35 25,35 C30,35 35,30 35,25 C35,20 30,15 25,15 Z" fill="#f8f8f8" stroke="none"/>
+            </svg>`,
+
+            // Cherry blossom petal - light pink
+            `<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 15,15 15,25 C15,35 20,40 25,45 C30,40 35,35 35,25 C35,15 30,10 25,5 Z" fill="#ffdbeb" stroke="#f8c1d9" stroke-width="0.5"/>
+                <path d="M25,10 C22,14 20,18 20,25 C20,32 22,36 25,40 C28,36 30,32 30,25 C30,18 28,14 25,10 Z" fill="#ffdbeb" stroke="none"/>
+            </svg>`,
+
+            // Sage green petal - matches theme
+            `<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C15,10 10,15 10,25 C10,35 15,40 25,45 C35,40 40,35 40,25 C40,15 35,10 25,5 Z" fill="#8A9A80" stroke="#798A70" stroke-width="0.5"/>
+                <path d="M25,10 C18,14 15,18 15,25 C15,32 18,36 25,40 C32,36 35,32 35,25 C35,18 32,14 25,10 Z" fill="#8A9A80" stroke="none"/>
+            </svg>`,
+
+            // Delicate white flower petal
+            `<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25,5 C20,10 10,20 10,30 C10,40 20,45 25,45 C30,45 40,40 40,30 C40,20 30,10 25,5 Z" fill="#ffffff" stroke="#f0f0f0" stroke-width="0.5"/>
+                <path d="M25,10 C22,14 15,22 15,30 C15,38 22,40 25,40 C28,40 35,38 35,30 C35,22 28,14 25,10 Z" fill="#ffffff" stroke="none"/>
+                <path d="M25,25 C24,25 23,26 23,27 C23,28 24,29 25,29 C26,29 27,28 27,27 C27,26 26,25 25,25 Z" fill="#fff8c6" stroke="none"/>
+            </svg>`
+        ];
+
+        // Create and animate petals
+        function createPetals() {
+            petalContainer.style.display = 'block';
+
+            // Clear any existing petals
+            petalContainer.innerHTML = '';
+
+            // Create new petals
+            for (let i = 0; i < 30; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+
+                // Random size between 15px and 35px
+                const size = Math.random() * 20 + 15;
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+
+                // Random position
+                petal.style.left = `${Math.random() * 100}%`;
+
+                // Set random petal design
+                const petalSVG = petalSVGs[Math.floor(Math.random() * petalSVGs.length)];
+                petal.innerHTML = petalSVG;
+
+                // Random rotation
+                const initialRotation = Math.random() * 360;
+                petal.style.transform = `rotate(${initialRotation}deg)`;
+
+                // Set animation
+                const duration = Math.random() * 6 + 6; // 6-12 seconds
+                const delay = Math.random() * 5; // 0-5 seconds delay
+                const horizontalMovement = (Math.random() - 0.5) * 200; // -100px to 100px
+
+                petal.style.animation = `none`; // Reset animation
+
+                // Apply custom animation
+                petal.animate([
+                    {
+                        transform: `translate(0, -10%) rotate(${initialRotation}deg)`,
+                        opacity: 0
+                    },
+                    {
+                        transform: `translate(0, -5%) rotate(${initialRotation + 20}deg)`,
+                        opacity: 0.9,
+                        offset: 0.1
+                    },
+                    {
+                        transform: `translate(${horizontalMovement * 0.3}px, ${window.innerHeight * 0.3}px) rotate(${initialRotation + 70}deg)`,
+                        opacity: 0.9,
+                        offset: 0.4
+                    },
+                    {
+                        transform: `translate(${horizontalMovement * 0.6}px, ${window.innerHeight * 0.6}px) rotate(${initialRotation + 140}deg)`,
+                        opacity: 0.8,
+                        offset: 0.7
+                    },
+                    {
+                        transform: `translate(${horizontalMovement}px, ${window.innerHeight}px) rotate(${initialRotation + 360}deg)`,
+                        opacity: 0
+                    }
+                ], {
+                    duration: duration * 1000,
+                    delay: delay * 1000,
+                    fill: 'forwards',
+                    easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
+                });
+
+                petalContainer.appendChild(petal);
+            }
+
+            // Stop petals after 15 seconds
+            setTimeout(() => {
+                petalContainer.style.display = 'none';
+            }, 18000);
+        }
+
+        // Trigger shimmer effect
+        function triggerShimmer(element) {
+            element.style.opacity = '1';
+            element.style.animation = 'shimmer 2s ease-in-out';
+
+            setTimeout(() => {
+                element.style.opacity = '0';
+                element.style.animation = 'none';
+            }, 2000);
+        }
+
+        // Handle envelope click
+        envelope.addEventListener('click', function () {
+            this.classList.toggle('open');
+
+            // If opening the envelope
+            if (this.classList.contains('open')) {
+                // Create falling petals
+                createPetals();
+
+                // Trigger shimmer on envelope
+                triggerShimmer(envelopeShimmer);
+
+                // Show the card after a delay
+                setTimeout(() => {
+                    card.classList.add('show');
+
+                    // Trigger shimmer on card
+                    setTimeout(() => {
+                        triggerShimmer(cardShimmer);
+                    }, 500);
+                }, 1000);
+            } else {
+                // If closing the envelope, hide the card first
+                card.classList.remove('show');
+                petalContainer.style.display = 'none';
+            }
+        });
+
+        // Handle RSVP responses
+        function respond(response) {
+            // Get form values
+            const guestName = document.getElementById('guest-name').value.trim();
+            const guestEmail = document.getElementById('guest-email').value.trim();
+            const guestCount = document.getElementById('guest-count').value;
+            const dietaryRestrictions = document.getElementById('dietary-restrictions').value.trim();
+
+            // Validate form
+            if (!guestName) {
+                alert("Please enter your names.");
+                return;
+            }
+
+            if (!guestEmail) {
+                alert("Please enter your email address.");
+                return;
+            }
+
+            // Create response object
+            const responseObj = {
+                id: Date.now(),
+                name: guestName,
+                email: guestEmail,
+                guests: guestCount,
+                dietary: dietaryRestrictions,
+                response: response,
+                date: new Date().toISOString()
+            };
+
+            // Add to responses array
+            responses.push(responseObj);
+
+            // Save to localStorage
+            localStorage.setItem('weddingResponses', JSON.stringify(responses));
+
+            // Hide RSVP buttons
+            rsvpSection.style.display = 'none';
+
+            // Set response message
+            if (response === 'accept') {
+                // Extract first name for personalization
+                const firstNames = guestName.split('&')[0].trim();
+                responseMessage.textContent = `Thank you, ${firstNames}! We look forward to celebrating with you!`;
+            } else {
+                const firstNames = guestName.split('&')[0].trim();
+                responseMessage.textContent = `Thank you, ${firstNames}. We're sorry you can't make it.`;
+            }
+
+            // Show thank you message with shimmer
+            thankYouSection.classList.add('show');
+            triggerShimmer(cardShimmer);
+
+            // Create a small celebration of petals for "accept" response
+            if (response === 'accept') {
+                setTimeout(() => {
+                    createPetals();
+                }, 300);
+            }
+
+            // Update admin panel if open
+            updateResponseList();
+        }
+
+        // Admin Panel Functions
+        adminToggle.addEventListener('click', function () {
+            adminPanel.classList.add('open');
+        });
+
+        closeAdmin.addEventListener('click', function () {
+            adminPanel.classList.remove('open');
+        });
+
+        loginBtn.addEventListener('click', function () {
+            if (adminPassword.value === ADMIN_PASSWORD) {
+                passwordError.classList.add('hidden');
+                responsesContainer.classList.remove('hidden');
+                updateResponseList();
+            } else {
+                passwordError.classList.remove('hidden');
+            }
+        });
+
+        // Allow Enter key to submit password
+        adminPassword.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                loginBtn.click();
+            }
+        });
+
+        // Update response list in admin panel
+        function updateResponseList() {
+            // Update counts
+            totalCount.textContent = responses.length;
+            acceptedCount.textContent = responses.filter(r => r.response === 'accept').length;
+            declinedCount.textContent = responses.filter(r => r.response === 'decline').length;
+
+            // Clear current list
+            responseList.innerHTML = '';
+
+            // If no responses
+            if (responses.length === 0) {
+                responseList.innerHTML = '<p class="text-gray-500 text-center py-4">No responses yet</p>';
+                return;
+            }
+
+            // Sort responses by date (newest first)
+            const sortedResponses = [...responses].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Add each response to the list
+            sortedResponses.forEach(resp => {
+                const item = document.createElement('div');
+                item.className = 'response-item';
+
+                const date = new Date(resp.date).toLocaleDateString();
+                const time = new Date(resp.date).toLocaleTimeString();
+
+                item.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-medium">${resp.name}</h4>
+                            <p class="text-sm text-gray-600">${resp.email}</p>
+                        </div>
+                        <span class="px-2 py-1 text-xs rounded ${resp.response === 'accept' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            ${resp.response === 'accept' ? 'Accepted' : 'Declined'}
+                        </span>
+                    </div>
+                    <div class="mt-2 text-sm">
+                        <p>Guests: ${resp.guests}</p>
+                        ${resp.dietary ? `<p>Dietary: ${resp.dietary}</p>` : ''}
+                        <p class="text-xs text-gray-500 mt-1">${date} at ${time}</p>
+                    </div>
+                `;
+
+                responseList.appendChild(item);
+            });
+        }
+
+        // Export responses to CSV
+        exportCsv.addEventListener('click', function () {
+            if (responses.length === 0) {
+                alert('No responses to export');
+                return;
+            }
+
+            // Create CSV header
+            let csv = 'Name,Email,Response,Guests,Dietary Restrictions,Date\n';
+
+            // Add each response
+            responses.forEach(resp => {
+                const date = new Date(resp.date).toLocaleString();
+                // Escape fields that might contain commas
+                const name = `"${resp.name.replace(/"/g, '""')}"`;
+                const email = `"${resp.email.replace(/"/g, '""')}"`;
+                const dietary = resp.dietary ? `"${resp.dietary.replace(/"/g, '""')}"` : '""';
+
+                csv += `${name},${email},${resp.response},${resp.guests},${dietary},"${date}"\n`;
+            });
+
+            // Create download link
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'wedding_rehearsal_responses.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'95402ba3062838e2',t:'MTc1MDY0MTcwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+    <iframe height="1" width="1"
+        style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+
+</body>
+
+</html>
